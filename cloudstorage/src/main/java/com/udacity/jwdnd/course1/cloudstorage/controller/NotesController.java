@@ -27,10 +27,12 @@ public class NotesController {
         User user = (User) session.getAttribute("user");
         if (!ObjectUtils.isEmpty(note.getNoteid())){
             notesService.update(note);
+            model.addAttribute("noteUpdateSuccess", true);
         } else {
             notesService.save(note, user.getUserid());
+            model.addAttribute("noteCreateSuccess", true);
         }
-        model.addAttribute("noteAdded","Notes save/update successfully!!");
+//        model.addAttribute("noteAdded","Notes save/update successfully!!");
         return new ModelAndView("redirect:/", model);
     }
 
@@ -39,7 +41,8 @@ public class NotesController {
         User user = (User) session.getAttribute("user");
         notesService.deleteById(noteid);
         model.addAttribute("notes", notesService.getAllByUserid(user.getUserid()));
-        model.addAttribute("Notes Deleted successfully!!");
+//        model.addAttribute("Notes Deleted successfully!!");
+        model.addAttribute("noteDeleteSuccess", true);
         return new ModelAndView("redirect:/", model);
     }
 

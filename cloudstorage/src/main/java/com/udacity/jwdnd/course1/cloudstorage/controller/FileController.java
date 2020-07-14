@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,19 +38,43 @@ public class FileController {
             model.addAttribute("fileUploadEmpty", true);
             return new ModelAndView("redirect:/", model);
         }
+        List<File> savedFile = new ArrayList<File>();
+        savedFile = fileService.getAllFilesByUserId(user.getUserid());
 
-        fileService.upload(fileUpload, user.getUserid());
-        model.addAttribute("fileUploadSuccess", true);
-        model.addAttribute("files",fileService.getAllFilesByUserId(user.getUserid()));
-        return new ModelAndView("redirect:/", model);
+        if (savedFile.isEmpty()){
+            fileService.upload(fileUpload, user.getUserid());
+            model.addAttribute("fileUploadSuccess", true);
+            model.addAttribute("files",fileService.getAllFilesByUserId(user.getUserid()));
+            return new ModelAndView("redirect:/", model);
+        } else {
+            boolean duplicateFile = false;
+            for (File file: savedFile) {
+                if (file.getFilename().equals(fileUpload.getOriginalFilename())) {
+                    duplicateFile = true;
+                    break;
+                }
+            }
+            if (duplicateFile){
+                model.addAttribute("fileUploadFail", true);
+                model.addAttribute("files",fileService.getAllFilesByUserId(user.getUserid()));
+                return new ModelAndView("redirect:/", model);
+            } else {
+                fileService.upload(fileUpload, user.getUserid());
+                model.addAttribute("fileUploadSuccess", true);
+                model.addAttribute("files",fileService.getAllFilesByUserId(user.getUserid()));
+                return new ModelAndView("redirect:/", model);
+            }
+
+        }
     }
 
     @RequestMapping(value = "/file-delete/{fileid}")
     public ModelAndView delete(HttpSession session, ModelMap modelMap, @PathVariable("fileid") Integer fileid){
         fileService.delete(fileid);
         User user = (User) session.getAttribute("user");
+        modelMap.addAttribute("fileDeleteSuccess", true);
         modelMap.addAttribute("files", fileService.getAllFilesByUserId(user.getUserid()));
-        return new ModelAndView("home", modelMap);
+        return new ModelAndView("redirect:/", modelMap);
     }
 
     @RequestMapping(value = "/file/view/{fileid}")

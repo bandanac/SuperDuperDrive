@@ -26,10 +26,12 @@ public class CredentialController {
         User user = (User) session.getAttribute("user");
         if (!ObjectUtils.isEmpty(credential.getCredentialid())){
             credentialService.update(credential);
+            model.addAttribute("credentialUpdateSuccess", true);
         } else {
             credentialService.save(credential, user.getUserid());
+            model.addAttribute("credentialCreateSuccess", true);
         }
-        model.addAttribute("credAdded","Credential save/update successfully!!");
+//        model.addAttribute("credAdded","Credential save/update successfully!!");
         return new ModelAndView("redirect:/", model);
     }
 
@@ -39,7 +41,8 @@ public class CredentialController {
         User user = (User) session.getAttribute("user");
         credentialService.deleteById(credentialid);
         model.addAttribute("notes", credentialService.getAllByUserid(user.getUserid()));
-        model.addAttribute("credentialDeleted", "Notes Deleted successfully!!");
+        model.addAttribute("credentialDeleteSuccess", true);
+//        model.addAttribute("credentialDeleted", "Notes Deleted successfully!!");
         return new ModelAndView("redirect:/", model);
     }
 

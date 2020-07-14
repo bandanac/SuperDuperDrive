@@ -315,7 +315,7 @@ class CloudStorageApplicationTests {
 	@Order(9)
 	public void validLoginAndCredentialCreationTest() {
 		WebDriverWait wait = new WebDriverWait (driver, 30);
-		String credUsername = "Gaurav";
+		String credUsername = "Bandana";
 		driver.get("http://localhost:" + this.port + "/");
 		driver.manage().window().maximize();
 		JavascriptExecutor jse =(JavascriptExecutor) driver;
@@ -334,7 +334,7 @@ class CloudStorageApplicationTests {
 
 		WebElement usernameText = driver.findElement(By.id("credential-username"));
 		usernameText.click();
-		usernameText.sendKeys("Gaurav");
+		usernameText.sendKeys("Bandana");
 		WebElement passwordText = driver.findElement(By.id("credential-password"));
 		passwordText.click();
 		passwordText.sendKeys("rehoboam");
@@ -365,7 +365,7 @@ class CloudStorageApplicationTests {
 	@Order(10)
 	public void validLoginAndCredentialUpdateTest() {
 		WebDriverWait wait = new WebDriverWait (driver, 30);
-		String credUsername = "Gaurav1";
+		String credUsername = "Bandana1";
 		driver.get("http://localhost:" + this.port + "/");
 		driver.manage().window().maximize();
 		JavascriptExecutor jse =(JavascriptExecutor) driver;
